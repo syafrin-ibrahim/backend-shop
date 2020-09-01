@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductGalleryRequest;
+use App\Models\ProductGallery;
 use App\Models\Product;
-use App\Http\Requests\ProductRequest;
-use Illuminate\Support\Str;
-class ProductController extends Controller
+class ProductGalleryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -21,9 +20,8 @@ class ProductController extends Controller
 
     public function index()
     {
-        $items = Product::all();
-
-        return view('pages.products.index', compact('items'));
+        $items = ProductGallery::with('product')->get();
+        return view('pages.gallery.index', compact('items'));
     }
 
     /**
@@ -33,7 +31,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('pages.products.create');
+        $items = Product::all();
+        return view('pages.gallery.create', compact('items'));
     }
 
     /**
@@ -42,12 +41,12 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(ProductGalleryRequest $request)
     {
-        $data = $request->All();
-        $data['slug'] = Str::slug($request->name);
-        Product::create($data);
-        return redirect()->route('products.index'); 
+          $data = $request->all();
+        $data['photo'] = $request->file('photo')->store('assets/product','public');
+        ProductGallery::create($data);
+         return redirect()->route('product-gallery.index');
     }
 
     /**
@@ -69,8 +68,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $item = Product::findOrFail($id);
-        return view('pages.products.edit', compact('item'));
+        //
     }
 
     /**
@@ -80,13 +78,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $data['slug'] = $request->name;
-        $item = Product::findOrFail($id);
-        $item->update($data);
-        return redirect()->route('products.index');
+        //
     }
 
     /**
@@ -97,8 +91,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $item = Product::findOrFail($id);
+         $item = ProductGallery::findOrFail($id);
         $item->delete();
-         return redirect()->route('products.index');
+         return redirect()->route('product-gallery.index');
     }
 }

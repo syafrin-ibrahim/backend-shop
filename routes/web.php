@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/','DashboardController@index')->name('home');
 Route::resource('/products','ProductController');
+Route::resource('/product-gallery','ProductGalleryController');
 
 Auth::routes();
 
