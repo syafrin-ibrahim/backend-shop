@@ -14,9 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/','DashboardController@index')->name('home');
+Auth::routes();
+Route::get('products/{id}/gallery', 'ProductController@showGallery')->name('products.gallery');
 Route::resource('/products','ProductController');
+Route::resource('/transactions','TransactionController');
+Route::get('/transactions/{id}/change-status','TransactionController@changeStatus')->name('transaction.status');
+
 Route::resource('/product-gallery','ProductGalleryController');
 
-Auth::routes();
+
 
 //Route::get('/home', 'HomeController@index')->name('home');
