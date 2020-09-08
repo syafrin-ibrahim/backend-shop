@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Http\Controller\API\ResponseFormatter;
+//use App\Http\Controller\API\ResponseFormatter;
 class ProductController extends Controller
 {
     public function all(Request $request){
